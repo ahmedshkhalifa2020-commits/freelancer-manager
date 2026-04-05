@@ -18,7 +18,6 @@ src/
 │   ├── entities/              // 🧱 تعريف الـ Models / Tables (Schema Representation)
 │   ├── repositories/          // 📦 تنفيذ عمليات الـ CRUD + Queries
 │   │   ├── base.repository.ts  // 🔁 Base Generic Repository (Reusable CRUD)
-│   │   ├── ibase.repository.ts // 🔁 interface for Base Generic Repository (Reusable CRUD)
 │   │   └── (other repositories...) // 📌 Repositories خاصة بكل Feature
 │   ├── extend/                // 🧩 Extensions / Custom DB logic (مثلاً Prisma Extensions)
 │   ├── seed/                  // 🌱 Seed Data (Initial Data for DB)
