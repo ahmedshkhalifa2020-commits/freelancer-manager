@@ -1,6 +1,7 @@
 # نظام التسجيل العام (Global Logging System)
 
 ## نظرة عامة
+
 تم إنشاء نظام تسجيل عام في مشروع Next.js مشابه لنظام NLog في مشروع ASP.NET. يستخدم Pino كمكتبة التسجيل الرئيسية لأدائها العالي ودعم JSON المنظم.
 
 ## المكونات الرئيسية
@@ -8,54 +9,60 @@
 ### 1. ملف الـ Logger الأساسي (`src/lib/logger.ts`)
 
 #### الغرض
+
 يحتوي على إعداد الـ logger الرئيسي مع إخراج مزدوج (console و file).
 
 #### الكود التفصيلي
+
 ```typescript
-import pino from 'pino';
-import path from 'path';
-import fs from 'fs';
+import pino from "pino";
+import path from "path";
+import fs from "fs";
 
 // إنشاء مجلد logs إذا لم يكن موجوداً
-const logsDir = path.join(process.cwd(), 'logs');
+const logsDir = path.join(process.cwd(), "logs");
 if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
 // تحديد اسم الملف بناءً على التاريخ
-const currentDate = new Date().toISOString().split('T')[0];
+const currentDate = new Date().toISOString().split("T")[0];
 const logFilePath = path.join(logsDir, `${currentDate}.log`);
 
 // إعداد الـ logger مع مستويين
-const logger = pino({
-  level: process.env.LOG_LEVEL || 'info',
-  formatters: {
-    level: (label) => {
-      return { level: label.toUpperCase() };
+const logger = pino(
+  {
+    level: process.env.LOG_LEVEL || "info",
+    formatters: {
+      level: (label) => {
+        return { level: label.toUpperCase() };
+      },
     },
+    timestamp: pino.stdTimeFunctions.isoTime,
   },
-  timestamp: pino.stdTimeFunctions.isoTime,
-}, pino.multistream([
-  // إخراج للـ console
-  {
-    stream: pino.destination({
-      dest: process.stdout.fd,
-      sync: false,
-    }),
-  },
-  // إخراج للملف
-  {
-    stream: pino.destination({
-      dest: logFilePath,
-      sync: false,
-    }),
-  },
-]));
+  pino.multistream([
+    // إخراج للـ console
+    {
+      stream: pino.destination({
+        dest: process.stdout.fd,
+        sync: false,
+      }),
+    },
+    // إخراج للملف
+    {
+      stream: pino.destination({
+        dest: logFilePath,
+        sync: false,
+      }),
+    },
+  ]),
+);
 
 export default logger;
 ```
 
 #### الميزات
+
 - **تدوير الملفات اليومي**: كل يوم ملف جديد باسم `YYYY-MM-DD.log`
 - **تنظيف تلقائي**: حذف الملفات القديمة عند تجاوز `LOG_MAX_FILES`
 - **JSON منظم**: جميع السجلات بصيغة JSON مع timestamps
@@ -66,21 +73,27 @@ export default logger;
 ### 2. ملف البدء والأخطاء (`instrumentation.ts`)
 
 #### الغرض
+
 يتعامل مع تسجيل بداية التطبيق وأخطاء الطلبات العامة.
 
 #### الكود التفصيلي
-```typescript
-import logger from './src/lib/logger';
 
-export const runtime = 'nodejs';
+```typescript
+import logger from "./src/lib/logger";
+
+export const runtime = "nodejs";
 
 export async function register() {
-  logger.info('Application starting up');
+  logger.info("Application starting up");
 }
 
-export async function onRequestError(err: Error, request: Request, context: any) {
+export async function onRequestError(
+  err: Error,
+  request: Request,
+  context: any,
+) {
   logger.error({
-    message: 'Request error',
+    message: "Request error",
     error: err.message,
     stack: err.stack,
     url: request.url,
@@ -90,6 +103,7 @@ export async function onRequestError(err: Error, request: Request, context: any)
 ```
 
 #### الميزات
+
 - **تسجيل البدء**: رسالة عند بدء التطبيق
 - **معالجة الأخطاء**: تسجيل تفصيلي لأخطاء الطلبات
 - **Node.js Runtime**: مضمون التشغيل في بيئة Node.js
@@ -97,22 +111,27 @@ export async function onRequestError(err: Error, request: Request, context: any)
 ### 3. ملف الوسيط (Middleware) (`src/middleware.ts`)
 
 #### الغرض
+
 يسجل جميع الطلبات الواردة للـ API.
 
 #### الكود التفصيلي
-```typescript
-import { NextRequest, NextResponse } from 'next/server';
-import logger from '@/lib/logger';
 
-export const runtime = 'nodejs';
+```typescript
+import { NextRequest, NextResponse } from "next/server";
+import logger from "@/lib/logger";
+
+export const runtime = "nodejs";
 
 export function middleware(request: NextRequest) {
   const { method, url } = request;
-  const userAgent = request.headers.get('user-agent') || '';
-  const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+  const userAgent = request.headers.get("user-agent") || "";
+  const ip =
+    request.headers.get("x-forwarded-for") ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
 
   logger.info({
-    message: 'Incoming request',
+    message: "Incoming request",
     method,
     url,
     userAgent,
@@ -123,11 +142,12 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/api/:path*',
+  matcher: "/api/:path*",
 };
 ```
 
 #### الميزات
+
 - **تسجيل الطلبات**: كل طلب API يتم تسجيله
 - **معلومات شاملة**: method, URL, user agent, IP
 - **محدد المسارات**: يعمل فقط على `/api/*`
@@ -135,79 +155,88 @@ export const config = {
 ### 4. مثال على الاستخدام (`src/app/api/test/route.ts`)
 
 #### الغرض
+
 يظهر كيفية استخدام الـ logger في API routes.
 
 #### الكود التفصيلي
+
 ```typescript
-import { NextRequest, NextResponse } from 'next/server';
-import logger from '@/lib/logger';
+import { NextRequest, NextResponse } from "next/server";
+import logger from "@/lib/logger";
 
 export async function GET(request: NextRequest) {
-  logger.info('Test API called');
+  logger.info("Test API called");
 
   try {
-    logger.debug('Processing test request');
-    return NextResponse.json({ message: 'Test successful' });
+    logger.debug("Processing test request");
+    return NextResponse.json({ message: "Test successful" });
   } catch (error) {
     logger.error({
-      message: 'Error in test API',
-      error: error instanceof Error ? error.message : 'Unknown error',
+      message: "Error in test API",
+      error: error instanceof Error ? error.message : "Unknown error",
     });
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 ```
 
 ## المقارنة مع NLog في ASP.NET
 
-| الميزة | NLog (ASP.NET) | Pino (Next.js) |
-|--------|----------------|----------------|
-| إعداد الملف | nlog.config XML | logger.ts TypeScript |
-| الإخراج | File + Console targets | multistream مع console + file |
-| الصيغة | JSON layout | JSON افتراضي |
-| التكوين | appsettings.json | متغيرات البيئة |
-| التدوير | ${shortdate} | Date-based filename |
-| التكامل | Program.cs | instrumentation.ts + middleware |
+| الميزة      | NLog (ASP.NET)         | Pino (Next.js)                  |
+| ----------- | ---------------------- | ------------------------------- |
+| إعداد الملف | nlog.config XML        | logger.ts TypeScript            |
+| الإخراج     | File + Console targets | multistream مع console + file   |
+| الصيغة      | JSON layout            | JSON افتراضي                    |
+| التكوين     | appsettings.json       | متغيرات البيئة                  |
+| التدوير     | ${shortdate}           | Date-based filename             |
+| التكامل     | Program.cs             | instrumentation.ts + middleware |
 
 ## كيفية الاستخدام في الكود
 
 ### استيراد الـ logger
+
 ```typescript
-import logger from '@/lib/logger';
+import logger from "@/lib/logger";
 ```
 
 ### أمثلة على التسجيل
+
 ```typescript
 // رسالة بسيطة
-logger.info('Application started');
+logger.info("Application started");
 
 // مع كائن منظم
 logger.info({
-  message: 'User login',
+  message: "User login",
   userId: 123,
-  email: 'user@example.com'
+  email: "user@example.com",
 });
 
 // تسجيل خطأ
 logger.error({
-  message: 'Database connection failed',
+  message: "Database connection failed",
   error: err.message,
-  stack: err.stack
+  stack: err.stack,
 });
 
 // تسجيل debug
-logger.debug('Processing user data', { userCount: 50 });
+logger.debug("Processing user data", { userCount: 50 });
 ```
 
 ## إعدادات البيئة
 
 ### متغيرات البيئة المدعومة
+
 - `LOG_LEVEL`: مستوى التسجيل (trace, debug, info, warn, error, fatal)
 - `LOG_PATH`: مسار مجلد السجلات (افتراضي: logs)
 - `LOG_MAX_FILES`: عدد الملفات المحفوظة كحد أقصى (افتراضي: 30)
 - `LOG_MAX_SIZE`: حجم الملف الأقصى (افتراضي: 10m)
 
 ### ملف .env.example
+
 تم إنشاء ملف `.env.example` يحتوي على جميع المتغيرات مع أمثلة للبيئات المختلفة:
 
 ```bash
@@ -225,6 +254,7 @@ LOG_MAX_SIZE="50m"
 ```
 
 ### مستويات التسجيل
+
 - **trace**: أدق تفاصيل للتتبع
 - **debug**: معلومات للمطورين
 - **info**: معلومات عامة مهمة
@@ -243,12 +273,14 @@ logs/
 ```
 
 ### تدوير الملفات
+
 - **تدوير يومي**: ملف جديد كل يوم
 - **تنظيف تلقائي**: حذف الملفات القديمة تلقائياً
 - **حد أقصى للملفات**: يحافظ على عدد محدود من الملفات
 - **حجم الملفات**: مراقبة حجم كل ملف
 
 ### مثال على محتوى الملف
+
 ```json
 {"level":"INFO","time":"2026-04-06T19:41:15.120Z","pid":9456,"hostname":"DESKTOP-BRJNLVG","message":"Incoming request","method":"GET","url":"http://localhost:3000/api/test","userAgent":"Mozilla/5.0...","ip":"::1"}
 {"level":"INFO","time":"2026-04-06T19:41:34.475Z","pid":9456,"hostname":"DESKTOP-BRJNLVG","msg":"Test API called"}
@@ -258,11 +290,13 @@ logs/
 ## الأداء والأمان
 
 ### الأداء
+
 - Pino مصمم للأداء العالي (أسرع من winston)
 - async logging لعدم حجب الطلبات
 - JSON format للمعالجة السريعة
 
 ### الأمان
+
 - لا يسجل كلمات المرور أو البيانات الحساسة
 - يمكن تصفية المعلومات الحساسة
 - مناسب للإنتاج
@@ -270,15 +304,19 @@ logs/
 ## التوسع والتطوير
 
 ### إضافة transports جديدة
+
 يمكن إضافة إخراج لقواعد البيانات أو خدمات خارجية.
 
 ### تخصيص الصيغة
+
 تخصيص formatters للسجلات حسب الحاجة.
 
 ### مراقبة السجلات
+
 استخدام أدوات مثل ELK stack لتحليل السجلات.
 
 ### تغيير الإعدادات في بيئة الإنتاج
+
 ```bash
 # في خادم الإنتاج
 export LOG_LEVEL="warn"
@@ -297,16 +335,19 @@ environment:
 ## الاختبار
 
 ### تشغيل السيرفر
+
 ```bash
 npm run dev
 ```
 
 ### اختبار API
+
 ```bash
 curl http://localhost:3000/api/test
 ```
 
 ### التحقق من السجلات
+
 - في الـ console أثناء التطوير
 - في ملفات `logs/` للسجلات المحفوظة
 
@@ -320,6 +361,7 @@ curl http://localhost:3000/api/test
 - **LOG_MAX_SIZE**: حجم الملف الأقصى
 
 ### الميزات المكتملة:
+
 - ✅ تسجيل يومي مع تدوير تلقائي
 - ✅ تنظيف الملفات القديمة تلقائياً
 - ✅ إخراج مزدوج (console + file)
@@ -332,6 +374,7 @@ curl http://localhost:3000/api/test
 ### أمثلة على الاستخدام في بيئات مختلفة:
 
 **تطوير:**
+
 ```bash
 LOG_LEVEL="debug"
 LOG_PATH="logs"
@@ -339,6 +382,7 @@ LOG_MAX_FILES="7"
 ```
 
 **إنتاج:**
+
 ```bash
 LOG_LEVEL="warn"
 LOG_PATH="/var/log/freelancer-manager"

@@ -1,19 +1,22 @@
-import { NextRequest, NextResponse } from 'next/server';
-import logger from '@/lib/logger';
+import { NextRequest, NextResponse } from "next/server";
+import logger from "@/lib/logger";
 
 export async function GET(request: NextRequest) {
-  logger.info('Test API called');
+  logger.info("Test API called");
 
   try {
     // Simulate some operation
-    logger.debug('Processing test request');
+    logger.debug("Processing test request");
 
-    return NextResponse.json({ message: 'Test successful' });
+    return NextResponse.json({ message: "Test successful" });
   } catch (error) {
     logger.error({
-      message: 'Error in test API',
-      error: error instanceof Error ? error.message : 'Unknown error',
+      message: "Error in test API",
+      error: error instanceof Error ? error.message : "Unknown error",
     });
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
