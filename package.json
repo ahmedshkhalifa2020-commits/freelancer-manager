@@ -3,16 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check",
-    "format": "biome format --write"
+    "preview": "next build && next start",
+    "check": "biome check",
+    "format": "biome format --write",
+    "lint": "biome check .",
+    "lint:fix": "biome check --apply .",
+    "typecheck": "tsc --noEmit",
+    "db:start": "docker-compose up -d",
+    "db:reset": "docker compose down -v && docker compose up -d",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:drop": "drizzle-kit drop",
+    "seed": "tsx src/server/db/schemas/seed/cli.ts",
+    "seed:all": "tsx src/server/db/schemas/seed/cli.ts all",
+    "seed:basics": "tsx src/server/db/schemas/seed/cli.ts basics",
+    "seed:relations": "tsx src/server/db/schemas/seed/cli.ts relations",
+    "test": "echo \"No tests yet\""
   },
   "dependencies": {
+    "@prisma/client": "^7.6.0",
+    "@t3-oss/env-nextjs": "^0.13.11",
+    "drizzle-kit": "^0.31.10",
+    "drizzle-orm": "^0.45.2",
     "next": "16.2.2",
+    "pg": "^8.20.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
