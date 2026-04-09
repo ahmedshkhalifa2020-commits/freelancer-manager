@@ -5820,3 +5820,5 @@
 2026-04-07 00:36:16.2340|INFO|Incoming request GET /_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js GET /_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js
 2026-04-07 00:36:16.2430|INFO|Incoming request GET /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js GET /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js
 2026-04-07 00:36:16.2700|INFO|Incoming request GET /_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js GET /_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js
+2026-04-07 21:21:37.5720|INFO|Application starting up
+2026-04-07 21:21:39.0160|INFO|Incoming request GET / GET /
