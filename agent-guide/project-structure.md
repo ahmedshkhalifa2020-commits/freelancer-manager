@@ -22,6 +22,7 @@ It is intended to help agents and future sessions understand where to make chang
 - **`src/tests/`** — Test files organized by use-case, repository, and API route.
 
 ## Important config files
+
 - `package.json` — development, build, lint, format, typecheck, and database scripts.
 - `next.config.ts` — Next.js configuration.
 - `tsconfig.json` — TypeScript compiler configuration.
@@ -31,6 +32,7 @@ It is intended to help agents and future sessions understand where to make chang
 - `.env`, `.env.example` — environment settings.
 
 ## Useful scripts
+
 - `npm run dev` — start Next.js development server.
 - `npm run build` — build the app for production.
 - `npm run start` — run the production build.
@@ -64,20 +66,22 @@ It is intended to help agents and future sessions understand where to make chang
    - `src/app/orders/create/page.tsx` — form that POSTs to /api/orders
 
 **Other task types:**
+
 - Database migrations: `drizzle.config.ts` and seed scripts.
 - Logging and helpers: `src/lib/`.
 - Tests: `src/tests/` (mirrors use-case, repository, API structure).
 
 ## Layer Responsibility Reference
 
-| Layer | Responsibility | Example |
-|-------|---|---|
-| API Route | HTTP adapter only | Parse request, validate with Zod, call `CreateOrderUseCase.execute()` |
-| Use-Case | Business logic, coordination | Validate products exist, check stock, call repositories in order |
-| Repository | CRUD only | `orderRepository.create()`, `findById()`, `update()`, `delete()` |
-| Entity | Schema definition | Drizzle `pgTable("orders", {...})` |
+| Layer      | Responsibility               | Example                                                               |
+| ---------- | ---------------------------- | --------------------------------------------------------------------- |
+| API Route  | HTTP adapter only            | Parse request, validate with Zod, call `CreateOrderUseCase.execute()` |
+| Use-Case   | Business logic, coordination | Validate products exist, check stock, call repositories in order      |
+| Repository | CRUD only                    | `orderRepository.create()`, `findById()`, `update()`, `delete()`      |
+| Entity     | Schema definition            | Drizzle `pgTable("orders", {...})`                                    |
 
 ## Agent guidance
+
 - Start with `AGENT_BASELINE.md` for workflow rules and architecture.
 - Use `agent-guide/agents/planner.md` to scope work and identify affected layers.
 - Use `agent-guide/skills/plan-workflow/SKILL.md` for planning prompts.
