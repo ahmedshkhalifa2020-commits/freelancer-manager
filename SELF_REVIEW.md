@@ -36,6 +36,7 @@ Self-review begins immediately after code is written and BEFORE final delivery.
 **Goal**: Validate implementation against PROJECT_BRAIN.md architecture rules.
 
 Check each layer:
+
 - **API Routes** (`src/app/api/`): Only HTTP adapters (parse → validate → call use-case → respond). NO business logic.
 - **Use-Cases** (`src/use-cases/`): Contain ALL business logic, validation, coordination. Receive repositories via constructor injection.
 - **Repositories** (`src/dal/repositories/`): Pure CRUD only (create, findById, findAll, update, delete). NO filtering, NO calculations.
@@ -43,6 +44,7 @@ Check each layer:
 - **Types** (`src/dal/types/`): Shared interfaces and enums.
 
 **Common Violations to Check:**
+
 - Business logic in API routes (calculations, decisions)
 - Database queries outside repositories
 - UI calling repositories directly (must use API routes)
@@ -56,6 +58,7 @@ Check each layer:
 **Goal**: Compare implementation with the APPROVED PLAN from AGENT_PLANNER.md.
 
 Verify:
+
 - All planned entities are created with correct fields
 - All planned types are defined
 - All planned repositories exist with correct methods
@@ -66,6 +69,7 @@ Verify:
 
 **Deviation Handling:**
 If implementation differs from plan:
+
 - **Mark it clearly** in the review report
 - **Either fix it** to match the plan OR **explain why deviation is necessary**
 - **Get user approval** for any deviation before delivery
@@ -77,6 +81,7 @@ If implementation differs from plan:
 **Goal**: Ensure code is clean, readable, and maintainable.
 
 Check:
+
 - **Type Safety**: All TypeScript types are correct, no `any` types
 - **Naming**: Clear, descriptive names for variables, functions, classes, files
 - **Function Size**: No functions longer than 20-30 lines (split if needed)
@@ -92,6 +97,7 @@ Check:
 **Goal**: Verify robust error handling and edge case coverage.
 
 Check:
+
 - **Domain Errors**: Use-cases throw `DomainError` with user-friendly messages
 - **HTTP Mapping**: API routes map domain errors to correct HTTP status codes (400 for business rules, 500 for system errors)
 - **Error Logging**: Real errors are logged, generic messages returned to client
@@ -107,6 +113,7 @@ Check:
 **Goal**: Ensure the simplest correct implementation.
 
 Check:
+
 - **Over-engineering**: Remove unnecessary abstractions, patterns, or complexity
 - **Dead Code**: Remove unused functions, variables, imports
 - **Simplest Solution**: Is there a simpler way to achieve the same result?
@@ -146,58 +153,59 @@ After implementation and before delivery, the agent MUST output:
 
 ### 1. Architecture Check
 
-* [x] No layer violations found
-* [x] Use-cases contain all business logic
-* [x] API routes are thin adapters only
-* [x] Proper dependency injection used
-* [x] No database access outside repositories
+- [x] No layer violations found
+- [x] Use-cases contain all business logic
+- [x] API routes are thin adapters only
+- [x] Proper dependency injection used
+- [x] No database access outside repositories
 
 ### 2. Plan Consistency
 
-* [x] All planned files implemented
-* [x] All use-cases match plan
-* [x] Repository methods match plan
-* [x] No unexplained deviations
+- [x] All planned files implemented
+- [x] All use-cases match plan
+- [x] Repository methods match plan
+- [x] No unexplained deviations
 
 **Deviations (if any):**
+
 - None
 
 ### 3. Code Quality
 
-* [x] Type-safe implementation
-* [x] Clear naming throughout
-* [x] Functions appropriately sized
-* [x] Clean, readable structure
-* [x] No code duplication
+- [x] Type-safe implementation
+- [x] Clear naming throughout
+- [x] Functions appropriately sized
+- [x] Clean, readable structure
+- [x] No code duplication
 
 ### 4. Error Handling
 
-* [x] All expected errors handled
-* [x] Domain errors are user-friendly
-* [x] Correct HTTP status codes used
-* [x] No unhandled exceptions
+- [x] All expected errors handled
+- [x] Domain errors are user-friendly
+- [x] Correct HTTP status codes used
+- [x] No unhandled exceptions
 
 ### 5. Minimalism
 
-* [x] Simplest correct implementation
-* [x] No unnecessary complexity
-* [x] No dead code
+- [x] Simplest correct implementation
+- [x] No unnecessary complexity
+- [x] No dead code
 
 ### Improvements Made
 
-* **Fixed**: [Describe any fixes applied during review]
-* **Refactored**: [Describe any refactoring done]
-* **Simplified**: [Describe any simplifications made]
+- **Fixed**: [Describe any fixes applied during review]
+- **Refactored**: [Describe any refactoring done]
+- **Simplified**: [Describe any simplifications made]
 
 ---
 
 ## ENFORCEMENT RULES
 
-* **The agent MUST NOT deliver code without SELF-REVIEW**
-* **The agent MUST fix ALL detected issues BEFORE finishing**
-* **The agent MUST ensure consistency with AGENT_PLANNER.md and PROJECT_BRAIN.md**
-* **The agent MUST re-review after fixes**
-* **Code is NOT complete until review passes with no issues**
+- **The agent MUST NOT deliver code without SELF-REVIEW**
+- **The agent MUST fix ALL detected issues BEFORE finishing**
+- **The agent MUST ensure consistency with AGENT_PLANNER.md and PROJECT_BRAIN.md**
+- **The agent MUST re-review after fixes**
+- **Code is NOT complete until review passes with no issues**
 
 ---
 

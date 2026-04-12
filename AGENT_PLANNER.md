@@ -40,6 +40,7 @@ Complete the full planning steps (feature → entities → repositories → use-
 **Goal**: Define exactly what needs to be built.
 
 Questions to answer:
+
 - What is this feature supposed to do?
 - Who uses it?
 - What is the expected input and output?
@@ -49,6 +50,7 @@ Questions to answer:
 **Output**: 2-3 sentence feature summary.
 
 Example:
+
 > "Create an order from a list of products. User submits { userId, items: [{productId, qty}] }. The system validates that products exist and have stock, calculates total price, and returns the order ID. Depends on existing product and user tables."
 
 ### Step 2: Data Entity Planning
@@ -56,6 +58,7 @@ Example:
 **Goal**: Identify ALL database tables affected or created.
 
 For each table:
+
 - Name (e.g., `orders`, `order_items`)
 - Purpose (what does it store?)
 - Key fields (id, userId, totalPrice, status, timestamps)
@@ -65,6 +68,7 @@ For each table:
 **Output**: List of entities with field names and types.
 
 Example:
+
 ```
 Entities:
 - orders (NEW)
@@ -88,6 +92,7 @@ Entities:
 **Goal**: Define TypeScript types and enums.
 
 For each entity or operation:
+
 - Interface for the entity (TypeScript type)
 - Enum for status fields (if any)
 - Interface for input (CreateOrderRequest)
@@ -96,6 +101,7 @@ For each entity or operation:
 **Output**: List of types to create in `src/dal/types/`.
 
 Example:
+
 ```
 Types (in src/dal/types/order.ts):
 - OrderStatus enum: PENDING, PAID, SHIPPED
@@ -109,6 +115,7 @@ Types (in src/dal/types/order.ts):
 **Goal**: Identify CRUD operations needed.
 
 For each repository:
+
 - Name (e.g., `orderRepository`, `productRepository`)
 - List methods (create, findById, findAll, update, delete)
 - Mark which are NEW and which are EXISTING
@@ -117,6 +124,7 @@ For each repository:
 **Output**: List of repositories and their CRUD methods.
 
 Example:
+
 ```
 Repositories:
 - orderRepository (NEW)
@@ -141,6 +149,7 @@ Repositories:
 **Goal**: Identify business operations and their logic.
 
 For each use-case:
+
 - Name (e.g., CreateOrderUseCase)
 - Input (what does it receive?)
 - Business rules (validation, constraints)
@@ -151,6 +160,7 @@ For each use-case:
 **Output**: List of use-cases with logic outlined.
 
 Example:
+
 ```
 Use-Cases:
 - CreateOrderUseCase
@@ -177,6 +187,7 @@ Use-Cases:
 **Goal**: Define HTTP routes and their behavior.
 
 For each endpoint:
+
 - HTTP method (POST, GET, PATCH, DELETE)
 - Route path (e.g., POST /api/orders)
 - Input schema (Zod schema name)
@@ -187,6 +198,7 @@ For each endpoint:
 **Output**: List of endpoints with request/response shapes.
 
 Example:
+
 ```
 API Endpoints:
 - POST /api/orders
@@ -203,6 +215,7 @@ API Endpoints:
 **Goal**: Define what pages/components are needed.
 
 For each page or component:
+
 - Name (e.g., CreateOrderPage, OrderList)
 - Purpose (what does the user see?)
 - Form fields (if it's a form)
@@ -212,6 +225,7 @@ For each page or component:
 **Output**: List of UI components to create.
 
 Example:
+
 ```
 UI Components:
 - CreateOrderPage (src/app/orders/create/page.tsx)
@@ -232,6 +246,7 @@ UI Components:
 **Goal**: List all files to create or modify.
 
 Example:
+
 ```
 Files to Create:
 - src/dal/entities/order.ts
@@ -257,12 +272,12 @@ Files to Modify:
 
 Before presenting the plan, the agent MUST:
 
-* Validate all checklist items internally
-* Ensure:
-  * All entities are defined
-  * All use-cases are present
-  * No architecture violations
-  * File structure matches PROJECT_BRAIN.md
+- Validate all checklist items internally
+- Ensure:
+  - All entities are defined
+  - All use-cases are present
+  - No architecture violations
+  - File structure matches PROJECT_BRAIN.md
 
 **Rule**: If any validation fails → the agent MUST revise the plan before presenting it.
 
@@ -270,24 +285,24 @@ Before presenting the plan, the agent MUST:
 
 ## Phase 3: Present Plan
 
-* Present the FINAL validated plan clearly
-* The plan must be clean, structured, and ready for implementation
+- Present the FINAL validated plan clearly
+- The plan must be clean, structured, and ready for implementation
 
 ---
 
 ## Phase 4: User Review (MANDATORY)
 
-* The agent MUST wait for user approval before writing any code
-* No code is allowed before approval
+- The agent MUST wait for user approval before writing any code
+- No code is allowed before approval
 
 ---
 
 ## Explicit Rules
 
-* NO CODE BEFORE:
-  * Planning is complete
-  * Self-validation is passed
-  * User approval is received
+- NO CODE BEFORE:
+  - Planning is complete
+  - Self-validation is passed
+  - User approval is received
 
 ---
 
