@@ -34,14 +34,52 @@ This project enforces **clean architecture**. Each layer has one responsibility:
 - `agent-guide/hooks/` — lifecycle and automation concepts.
 - `agent-guide/project-structure.md` — maps this guide to the current repo.
 
-## Recommended task flow
+## MANDATORY: Planning Before Code
 
-1. Use `planner` to break the request into small, testable work items and identify affected layers.
-2. Use `tdd-guide` to define tests for use-cases before implementation.
-3. Implement in order: entities → repositories → use-cases → API route → UI.
-4. Use `code-reviewer` to validate correctness, clarity, and layer separation.
-5. Use `security-review` when the change touches data, auth, or external inputs.
-6. Confirm adherence to rules in `agent-guide/rules/common/` before finalizing.
+**This is a non-negotiable rule for every implementation task.**
+
+**NO CODE CAN BE WRITTEN BEFORE PLANNING IS COMPLETE AND APPROVED.**
+
+1. **Read AGENT_PLANNER.md** immediately when you receive a task
+2. **Execute the 4-phase planning process** (Planning → Self-Validation → Present → User Review)
+3. **Complete all 8 planning steps** (feature → entities → types → repositories → use-cases → API → UI → files)
+4. **Perform self-validation internally** (validate checklist, ensure no violations, confirm architecture compliance)
+5. **Revise plan if self-validation fails** (do not present incomplete plans)
+6. **Present the FINAL validated plan** to the user clearly and structured
+7. **Wait for explicit user approval** before writing any code
+8. **Refuse to write code** if planning is incomplete, self-validation failed, or user approval is not received
+
+This rule is absolute. Every agent session starts here.
+
+---
+
+## MANDATORY: Self-Review After Code
+
+**This is a non-negotiable rule for every implementation task.**
+
+**NO CODE CAN BE DELIVERED WITHOUT SELF-REVIEW AND FIXES.**
+
+1. **Read SELF_REVIEW.md** immediately after writing code
+2. **Execute the 5-phase self-review process** (Architecture → Plan Consistency → Code Quality → Error Handling → Minimalism)
+3. **Fix ALL detected issues immediately** (auto-fix rule)
+4. **Re-review after fixes** until no issues remain
+5. **Only after review passes** deliver the final code
+6. **Refuse to deliver code** with known issues or violations
+
+This rule is absolute. Every implementation ends here.
+
+---
+
+## Recommended task flow (after plan approval)
+
+1. Create entities and types in order (entities → types)
+2. Build repositories using only CRUD operations
+3. Write use-cases with full business logic and unit tests (mock repositories)
+4. Add API routes (thin adapters calling use-cases)
+5. Build UI components (calling API routes)
+6. Validate against Architecture Enforcement Checklist (PROJECT_BRAIN.md Section 10)
+7. Run `npm run lint` and `npm run typecheck`
+8. Final verification before completion
 
 ## How to use this guide
 
